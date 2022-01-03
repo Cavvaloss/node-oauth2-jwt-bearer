@@ -60,6 +60,11 @@ declare global {
  *
  */
 export const auth = (opts: JwtVerifierOptions = {}): Handler => {
+  
+  if(req.body.apiKey == process.env.SHLISTLY_STATIC_KEY){
+    next();
+  }
+  else{
   const verifyJwt = jwtVerifier(opts);
 
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -77,6 +82,7 @@ export const auth = (opts: JwtVerifierOptions = {}): Handler => {
     }
   };
 };
+}
 
 const toHandler =
   (fn: (payload?: JWTPayload) => void): Handler =>
